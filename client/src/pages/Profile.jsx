@@ -45,7 +45,7 @@
 
         if(image) {
           if (image.size > 2 * 1024 * 1024) {
-            dispatch(updateUserFailure("Image size must be less than 2MB."));
+            dispatch(updateUserFailure({ message: "Image size must be less than 2MB." }));
             return;
           }
 
