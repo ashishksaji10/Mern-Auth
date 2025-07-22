@@ -17,16 +17,19 @@ const __dirname = path.resolve();
 
 const app = express();
 
-app.use(express.static(path.join(__dirname,'/client/dist')));
 app.use(express.json());
 app.use(cookieParser());
+
 
 app.use("/api/user", userRoute);
 app.use("/api/auth", authRoute);
 
-app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'client','dist','index.html'));
+app.use(express.static(path.join(__dirname,'/client/dist')));
+
+app.get(/^\/(?!api).*/, (req, res) => {
+    res.sendFile(path.join(__dirname, 'client', 'dist', 'index.html'));
 });
+
 
 app.use((err, req, res, next) => {
     const statusCode = err.statusCode || 500;
@@ -38,9 +41,8 @@ app.use((err, req, res, next) => {
     });
 });
 
-const PORT = 3000;
 
-app.listen(PORT, () => {
-    console.log(`Server is running on port http://localhost:${PORT}`);
+app.listen(3000, () => {
+    console.log('Server is running on port http://localhost:3000');
 });
 
