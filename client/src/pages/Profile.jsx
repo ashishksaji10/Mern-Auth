@@ -1,6 +1,6 @@
   import { useDispatch, useSelector } from "react-redux";
   import { useEffect, useRef, useState } from "react";
-  import { updateUserStart, updateUserSuccess, updateUserFailure } from "../redux/user/userSlice";
+  import { updateUserStart, updateUserSuccess, updateUserFailure, deleteUserStart, deleteUserSuccess, deleteUserFailure  } from "../redux/user/userSlice";
 
   const Profile = () => {
     const { currentUser, loading, error } = useSelector((state) => state.user);
@@ -91,9 +91,30 @@
       } catch (error) {
         dispatch(updateUserFailure(error.message));
         setUploadStatus(error.message);
-        console.error("Profile update error:", error);
       }
     }
+
+
+    const handleDeleteAccount = async() => {
+      try {
+        dispatch(deleteUserStart());
+        const res = await fetch(`/api/user/delete/${currentUser._id}`,{
+            method: 'DELETE',
+            // credentials: 'include',
+        });
+
+        const data = await res.json();
+        if(data.success === false){
+          dispatch(deleteUserFailure(data));
+          return;
+        } 
+        dispatch(deleteUserSuccess(data));
+      } catch (error) {
+        dispatch(deleteUserFailure(error));
+      }
+    }
+
+
 
     return (
       <div className="p-3 max-w-lg mx-auto">
@@ -103,7 +124,7 @@
           <img src={image ? URL.createObjectURL(image) : formData.profilePicture} alt="profile" className='w-24 h-24 self-center cursor-pointer rounded-full object-cover mt-2' onClick={() => fileRef.current.click()} />
           
           {error ? (
-            <p className="text-red-800 text-center">{error}</p>
+            <p className="text-red-800 text-center">{error.message}</p>
           ) : (
             uploadStatus && <p className="text-green-800 text-center">{uploadStatus}</p>
           )}
@@ -114,7 +135,7 @@
           <button className="bg-slate-700 text-white p-3 rounded-lg uppercase hover:opacity-95 disabled:opacity-80">{loading ? "Updating..." : "Update"}</button>
         </form>
         <div className="flex justify-between mt-5">
-          <span className="text-red-700 cursor-pointer">Delete Account</span>
+          <span onClick={handleDeleteAccount} className="text-red-700 cursor-pointer">Delete Account</span>
           <span className="text-red-700 cursor-pointer">Sign Out</span>
         </div>
       </div>
