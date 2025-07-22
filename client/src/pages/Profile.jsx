@@ -65,7 +65,6 @@
           }
   
           const uploadResult = await uploadRes.json();
-          console.log(uploadResult, "UR");
           
           updatedFormData = { ...formData, profilePicture: uploadResult.secure_url };
           setUploadStatus("Image uploaded successfully!");
@@ -86,7 +85,6 @@
           }
     
           const result = await res.json();
-          console.log(result, "res");
 
           dispatch(updateUserSuccess(result));
           setUploadStatus("Profile updated successfully!");
