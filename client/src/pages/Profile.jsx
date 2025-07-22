@@ -102,7 +102,7 @@
         <h1 className='text-3xl font-semibold text-center my-7'>My Profile</h1>
         <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
           <input type="file" ref={fileRef} hidden accept="image/*" onChange={(e) => setImage(e.target.files[0])} />
-          <img src={formData.profilePicture} alt="profile" className='w-24 h-24 self-center cursor-pointer rounded-full object-cover mt-2' onClick={() => fileRef.current.click()} />
+          <img src={image ? URL.createObjectURL(image) : formData.profilePicture} alt="profile" className='w-24 h-24 self-center cursor-pointer rounded-full object-cover mt-2' onClick={() => fileRef.current.click()} />
           
           {error ? (
             <p className="text-red-800 text-center">{error}</p>
