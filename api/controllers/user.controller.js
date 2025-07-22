@@ -27,7 +27,7 @@ export const updateUser = async(req, res, next) => {
 
         const updatedUser = await User.findByIdAndUpdate(
             req.params.id,
-            { $set: { updateFields } },
+            { $set: updateFields },
             { new : true}
         );
 

@@ -109,7 +109,8 @@
         } 
         dispatch(deleteUserSuccess(data));
       } catch (error) {
-        dispatch(deleteUserFailure(error));
+        dispatch(updateUserFailure({ message: error.message }));
+        setUploadStatus(error.message);
       }
     }
 
