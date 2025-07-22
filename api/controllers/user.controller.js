@@ -14,20 +14,20 @@ export const updateUser = async(req, res, next) => {
     }
 
     try {
-        if(req.body.password) {
-            req.body.password = bcryptjs.hashSync(req.body.password,10);
+
+        const updateFields = {
+            username: req.body.username,
+            email: req.body.email,
+            profilePicture: req.body.profilePicture,
+        };
+
+        if (req.body.password && req.body.password.trim() !== "") {
+            updateFields.password = bcryptjs.hashSync(req.body.password, 10);
         }
 
         const updatedUser = await User.findByIdAndUpdate(
             req.params.id,
-            {
-                $set: {
-                    username : req.body.username,
-                    email : req.body.email,
-                    password : req.body.password,
-                    profilePicture : req.body.profilePicture,
-                }
-            },
+            { $set: { updateFields } },
             { new : true}
         );
 
